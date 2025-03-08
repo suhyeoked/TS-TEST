@@ -633,10 +633,9 @@ function add(a, b = 2 /*b:number = 2 를 b = 2 로해도 상관없음 => 타입 
 // 단언 키워드 - as
 // Non-null 단언 연산자 - !
 // 1)
-const el = document.querySelector('body') //document.querySelector 는 요소를 찾는데 요소를 찾지 못하면 null를 반환 
-;
-/* as HTMLBodyElement */ //as HTMLBodyElement 를 통해 HTMLBodyElement라고 단언
-el.textContent = "hi~!~!~";
+// const el = document.querySelector('body') /* as HTMLBodyElement */ //document.querySelector 는 요소를 찾는데 요소를 찾지 못하면 null를 반환 
+//as HTMLBodyElement 를 통해 HTMLBodyElement라고 단언
+// el!.textContent = "hi~!~!~"
 //!를 사용해 ! 앞에 있는 el이 null이 아니라는 것을 뜻함
 //1번에서는 html안에 body가 당연히 있어야 하고 모두가 알고 있기 때문에 !를 써도 문제가 되지 않는다
 // 1-1)
@@ -661,8 +660,84 @@ getValue("hello world", false);
 getValue(3.1415926535, true);
 //할당 당언
 let num1;
+//!를 통해 할당을 했다라고 함
 console.log(num1);
-num1 = 123 /*=========================== 타입 단언 ===========================*/ ;
+num1 = 123;
+/*=========================== 타입 단언 ===========================*/ /*=========================== 타입 가드 ===========================*/ // function logText(el: Element){
+//     console.log(el.textContent)
+// }
+// const h1El = document.querySelector("h1") as HTMLHeadingElement
+// logText(h1El)
+// 이렇게 하면 타입스크립트에서는 오류가 나지 않지만 웹에서는 오류가 나옴 이유는 el.textContent 여기서 NULL 데이터에서 읽을려고 했기 때문
+function logText(el) {
+    console.log(el.textContent);
+}
+// const h1El = document.querySelector("h1")
+// if(h1El){ // h1El는 h1태그가 없어 NULL를 반환 NULL은 거짓데이터이기 때문에 실행하지 않음
+//     logText(h1El)
+// }
+// 조건을 넣어 타입 가드를 시킴
+// 거짓 데이터가 아닐 때만 실행
+const h1El = document.querySelector("h1") // h1태그를 찾지 못하면 NULL 반환
+;
+if (h1El instanceof HTMLHeadingElement) logText(h1El);
+function add1(val) {
+    let res = "Result => ";
+    if (typeof val === 'number') res += val.toFixed(2);
+    if (typeof val === 'string') res += val.toUpperCase();
+    console.log(res);
+}
+add1(3.141592);
+add1("hello World ~!~!");
+const heropy = {
+    name: "Heropy",
+    age: 85,
+    getName (message) {
+        console.log(message);
+        return this.name;
+    }
+};
+heropy.getName("hello~!~!");
+const fruits = [
+    "Apple",
+    "Banana",
+    "Cherry"
+];
+console.log(fruits);
+const heropy1 = {
+    name: "Heropy",
+    age: 85
+};
+heropy1['isValid'] = true;
+heropy1['emails'] = [
+    'qwerasd@naver.com',
+    'test@naver.com'
+];
+console.log(heropy1);
+function logValues(payload) {
+    for(const key in payload)console.log(payload[key]);
+}
+const heropy2 = {
+    name: "Heropy",
+    age: 85,
+    isValid: true
+};
+logValues(heropy2);
+const heropy3 = {
+    name: "Heropy",
+    age: 85,
+    isValid: true
+};
+const neo1 = {
+    name: 'Neo',
+    age: 102,
+    isValid: true
+};
+const fullName = {
+    firstName: "Tomas",
+    middleName: "Sean",
+    lastName: "Connery"
+} /*=========================== 인터페이스 =========================== */ ;
 
 },{}]},["cAPdp","jeorp"], "jeorp", "parcelRequire94c2")
 
