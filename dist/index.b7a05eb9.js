@@ -737,7 +737,32 @@ const fullName = {
     firstName: "Tomas",
     middleName: "Sean",
     lastName: "Connery"
-} /*=========================== 인터페이스 =========================== */ ;
+};
+const userA = {
+    name: 'Neo',
+    age: 85,
+    isValid: true
+};
+const userB = [
+    'Evan',
+    36,
+    false
+];
+function someFunc(param) {
+    switch(typeof param){
+        case "string":
+            return param.toUpperCase();
+        case "number":
+            return param.toFixed(2);
+        default:
+            return "Boolean!";
+    }
+}
+const heropy4 = {
+    name: "Heropy",
+    age: 85,
+    isValid: true
+} /*=========================== 타입 별칭 =========================== */ ;
 
 },{}]},["cAPdp","jeorp"], "jeorp", "parcelRequire94c2")
 

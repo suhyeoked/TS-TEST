@@ -297,3 +297,68 @@ const fullName : FullName = {
 
 
 /*=========================== 인터페이스 =========================== */
+
+
+
+
+
+/*=========================== 타입 별칭 =========================== */
+
+type TypeA = string
+type TypeB = string | number | boolean
+type User4 = {
+    name : string
+    age : number
+    isValid : boolean
+} | [string , number , boolean]
+
+const userA: User4 = {
+    name : 'Neo' ,
+    age : 85 ,
+    isValid : true
+}
+
+const userB : User4 = ['Evan' , 36 , false]
+
+function someFunc(param : TypeB) : TypeA {
+    switch (typeof param) {
+        case "string":
+            return param.toUpperCase()
+        case "number" :
+            return param.toFixed(2)
+        default:
+            return "Boolean!"
+    }
+}
+
+
+// type과 interface의 차이점
+// type은 할당연산자(=) 필요
+
+
+// type과 interface은 기능적인 부분에서는 차이가 없음
+// 어떤 방식을 쓰던 상관은 없어 개인적인 취향에 맞춰 사용하면 됨
+// 하지만 interface 권장함
+
+type TypeUser = {
+    name : string 
+    age : number 
+    isValid : boolean
+}
+interface InterfaceUser {
+    name : string
+    age : number 
+    isValid : boolean
+}
+
+const heropy4 : InterfaceUser = {
+    name : "Heropy",
+    age : 85 ,
+    isValid : true
+}
+
+
+
+
+
+/*=========================== 타입 별칭 =========================== */
