@@ -362,3 +362,290 @@ const heropy4 : InterfaceUser = {
 
 
 /*=========================== 타입 별칭 =========================== */
+
+
+
+
+/*=========================== 함수 - 명시적 this =========================== */
+
+interface Cat {
+    name : string
+    age : number
+}
+
+
+const cat : Cat = {
+    name : "Lucy" ,
+    age : 3
+}
+
+// function hello1(message : string) {
+//     console.log(`Hello ${this.name} , ${message}`)
+// }
+// 이렇게 하면 에러는 안나지만 this를 사용하는 것이 부적합함
+
+function hello1(this : Cat ,message : string) {
+    console.log(`Hello ${this.name} , ${message}`)
+}
+// 이렇게 하면 this는 Cat이라는 객체 데이터가 될 것이라고 명시적으로 표현함
+
+
+hello1.call(cat  , 'You are pretty awesome!')
+
+
+
+
+/*=========================== 함수 - 명시적 this =========================== */
+
+
+
+
+
+/*=========================== 함수 - 오버로딩(Oveloading) =========================== */
+
+// 1)
+function add2 (a:string , b : string) {
+    return a + b
+}
+
+function add3 (a:number , b : number) {
+    return a + b
+}
+
+add2('hello', 'world~!')
+add3(1,2)
+add2('hello~!~!' , 2)
+add3('hello~!~!' , 2)
+
+// 2)
+function add4(a:string , b : string) :string // 타입 선언 1
+function add4(a:number , b : number) :number // 타입 선언 2
+function add4(a:any , b : any) { //함수를 구현하는 부분
+    // any가 있는 이유는 타입 선언 1 , 타입 선언 2 모두가 들어갈 수 있도록 하기 위해
+    return a + b
+}
+
+add4('hello', 'world~!')
+add4(1,2)
+add4('hello', 2)
+// 오류가 나는 이유는 a가 문자열이면 b도 문자열이여야 됨
+add4(2,'hello')
+// 오류가 나는 이유는 a가 숫자열이면 b도 숫자열이여야 됨
+// 위에 function add4 를 보면 됨
+
+
+
+/*=========================== 함수 - 오버로딩(Oveloading) =========================== */
+
+
+
+
+/*=========================== 클래스 =========================== */
+// 접근 제이자 (Access Modifiers)
+// public - 어디서나 자유롭게 접근 가능, 클래스 바디에서 생략 가능
+// protected - 나와 파상된 후손 클래스 내에서 접근 가능
+// private - 내 클래스에서만 접근 가능
+
+// 속성뿐만 아니라 메서드에서도 사용 가능
+
+
+class UserA1 {
+    // public first : string = ''
+    // protected last : string = ''
+    // private age : number = 0
+    // 초기화 해주는 코드
+    constructor(
+        public first : string = '' , 
+        public last : string = '', 
+        public age : number = 0
+        //public은 바디에서만 생략가능 매개변수 안에서는 public 사용해야 함
+        ){
+        //constructor를 통해 매개변수 3개 선언
+        
+        // this.first = first
+        // this.last = last
+        // this.age = age
+        // 매개변수에 public를 넣어주면 다시 속성에다가 값을 따로 할당할 필요가 없음
+    }
+    protected getAge(){
+        return `${this.first} ${this.last} is ${this.age}` 
+    }
+}
+
+class UserB1 extends UserA1 {
+    getAge() {
+        return `${this.first} ${this.last} is ${this.age}` 
+    }
+}
+
+class UserC1 extends UserB1 {
+    getAge() {
+        return `${this.first} ${this.last} is ${this.age}` 
+    }
+}
+
+
+const neo = new UserA1('Neo' , 'Anderson' , 102)
+
+console.log(neo.first)
+console.log(neo.last)
+console.log(neo.age)
+
+
+
+
+/*=========================== 클래스 =========================== */
+
+
+
+
+
+/*=========================== 제네릭(Generic) =========================== */
+// 함수
+
+interface Obj {
+    x:number
+}
+
+type Arr = [number , number]
+
+// function toArray(a: string , b : string) : string []
+// function toArray(a: number , b : number) : number []
+// function toArray(a: boolean , b : boolean) : boolean []
+// function toArray(a: Obj , b : Obj) : Obj []
+// function toArray(a: Arr , b : Arr) : Arr []
+// function toArray(a: Arr , b : Arr) : Arr []
+
+function toArray<T>(a: T , b : T) {
+    //<T>는 type 약어
+    //<T>는 매개변수처럼 타입의 정보를 가지고 있음
+    return [a , b]
+}
+
+console.log(
+    toArray<string>('Neo' , 'Anderson'),
+    //<string>를 쓰는 이유 -> 따로 타입 추론을 하지 않고 미리 적어 명시적 표현 따로 작성하지 않아도 됨
+    // a인 Neo가 string타입이기 때문에 b도 같은 타입이여야 됨
+    // 이유 -> a와 b가 둘다 같은 T이기 때문에 타입이 같아야함
+    toArray(1,2),
+    toArray(true , false) ,
+    toArray({ x : 1} , {x : 2}) ,
+    toArray<Arr>([1,2] , [3,4]) // number[]
+)
+
+
+
+// 클래식
+
+
+class User5<P/** payload 약어 */> {
+    constructor(public payload : P){}
+    getPayload() {
+        return this.payload
+    }
+}
+
+interface UserAType {
+    name : string
+    age : number
+    isValid : boolean
+}
+
+interface UserBType {
+    name : string
+    age : number
+    emails : string []
+}
+
+const heropyA = new User5<UserAType>({
+    name : 'Heropy' ,
+    age : 85 ,
+    isValid  : true
+})
+
+const neo2 = new User5<UserBType> ({
+    name : 'Neo' ,
+    age: 102,
+    emails : ['neo@naver.com']
+})
+
+
+// 인터페이스 , 제약 조건(Constraints)
+
+interface MyData<T extends string | number | boolean | number[]> {
+    name : string
+    value : T
+}
+
+const dataA: MyData<string> = {
+    name : 'Data A' ,
+    value : 'hello world'
+}
+
+const dataB: MyData<number> = {
+    name : 'Data B' ,
+    value : 123
+}
+
+const dataC: MyData<boolean> = {
+    name : 'Data C' ,
+    value : true
+}
+
+const dataD: MyData<number[]> = {
+    name : 'DataD' ,
+    value : [1,2,3,4]
+}
+
+
+
+/*=========================== 제네릭(Generic) =========================== */
+
+
+
+
+
+
+
+/*=========================== 패키지 타입 선언 =========================== */
+
+import _ from 'lodash'
+
+const str = 'the brown fox jumps over the lazy dog.'
+
+console.log(_.camelCase(str))
+console.log(_.snakeCase(str))
+console.log(_.kebabCase(str))
+
+
+
+/*=========================== 패키지 타입 선언 =========================== */
+
+
+
+
+
+
+
+
+/*=========================== 타입 가져오기 / 내보내기 =========================== */
+import {getFullName , UserTs } from './user'
+
+const heropyTs : UserTs = {
+    firstName : 'Heropy' ,
+    lastName : 'Park' ,
+    age : 85 ,
+    isValid : true
+}
+
+const fullName1 = getFullName(heropyTs)
+
+console.log(fullName1)
+console.log(heropyTs.isValid)
+
+
+
+
+
+
+/*=========================== 타입 가져오기 / 내보내기 =========================== */
